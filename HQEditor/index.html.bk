@@ -1,0 +1,299 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>HQEditor</title>
+</head>
+
+<body>
+
+<div style="width:530px;height:200px;" id="abc">
+	
+</div>
+<input type="button" id="send" value="发送" />
+<script type="text/javascript" src="HQEditor/HQEditor.js"></script>
+<script type="text/javascript">
+	var edit = new HQEDITOR.editor("abc");
+</script>
+<script type="text/javascript">
+(function(window){
+	var LS, noop = function(){}, document = window.document, notSupport = {set:noop,get:noop,remove:noop,clear:noop,each:noop,obj:noop,length:0};
+	
+	(function(){
+		if( "localStorage" in window ){
+			try{
+				LS = window.localStorage;
+				return;
+			}catch(e){}
+		}
+		
+		var o = document.getElementsByTagName("head")[0], hostKey = window.location.hostname || "localStorage", d = new Date(), doc, agent;
+		
+		if(!o.addBehavior){
+			try{
+				LS = window.localStorage;
+			}catch(e){
+				LS = null;
+			}
+			return;
+		}
+		
+		try{
+			agent = new ActiveXObject('htmlfile');
+			agent.open();
+			agent.write('<s' + 'cript>document.w=window;</s' + 'cript><iframe src="/favicon.ico"></iframe>');
+			agent.close();
+			doc = agent.w.frames[0].document;
+			o = doc.createElement('head');
+			doc.appendChild(o);
+		}catch(e){
+			o = document.getElementsByTagName("head")[0];
+		}
+		
+		try{
+			d.setDate(d.getDate() + 36500);
+			o.addBehavior("#default#userData");
+			o.expires = d.toUTCString();
+			o.load(hostKey);
+			o.save(hostKey);
+		}catch(e){
+			return;
+		}
+		var root, attrs;
+		try{
+			root = o.XMLDocument.documentElement;
+			attrs = root.attributes;
+		}catch(e){
+			return;
+		}
+		var prefix = "p__hack_", spfix = "m-_-c",
+			reg1 = new RegExp("^"+prefix),
+			reg2 = new RegExp(spfix,"g"),
+			encode = function(key){ return encodeURIComponent(prefix + key).replace(/%/g, spfix); },
+			decode = function(key){ return decodeURIComponent(key.replace(reg2, "%")).replace(reg1,""); };
+		LS= {
+			length: attrs.length,
+			isVirtualObject: true,
+			getItem: function(key){
+				return (attrs.getNamedItem( encode(key) ) || {nodeValue: null}).nodeValue||root.getAttribute(encode(key)); 
+			},
+			setItem: function(key, value){
+				try{
+					root.setAttribute( encode(key), value);
+					o.save(hostKey);
+					this.length = attrs.length;
+				}catch(e){
+				}
+			},
+			removeItem: function(key){
+				try{
+					root.removeAttribute( encode(key) );
+					o.save(hostKey);
+					this.length = attrs.length;
+				}catch(e){
+				}
+			},
+			clear: function(){
+				while(attrs.length){
+					this.removeItem( attrs[0].nodeName );
+				}
+				this.length = 0;
+			},
+			key: function(i){
+				return attrs[i] ? decode(attrs[i].nodeName) : undefined;
+			}
+		};
+		if( !("localStorage" in window) )
+			window.localStorage = LS;
+	})();
+	
+	window.LS = !LS ? notSupport : {
+		set : function(key, value){
+			if( this.get(key) !== undefined )
+				this.remove(key);
+			LS.setItem(key, value);
+			this.length = LS.length;
+		},
+		get : function(key){
+			var v = LS.getItem(key);
+			return v === null ? undefined : v;
+		},
+		remove : function(key){ LS.removeItem(key);this.length = LS.length; },
+		clear : function(){ LS.clear();this.length = 0; },
+		each : function(callback){
+			var list = this.obj(), fn = callback || function(){}, key;
+			for(key in list) if( fn.call(this, key, this.get(key)) === false ) break;
+		},
+		obj : function(){
+			var list={}, i=0, n, key;
+			if( LS.isVirtualObject ){
+				list = LS.key(-1);
+			}else{
+				n = LS.length;
+				for(; i<n; i++){
+					key = LS.key(i);
+					list[key] = this.get(key);
+				}
+			}
+			return list;
+		},
+		length : LS.length
+	};
+	if( window.jQuery ) window.jQuery.LS = window.LS;
+})(window); 
+	
+var common = {
+	setCookie:function(name,value,expiry,path,domain,secure){
+		
+		var nameString = name + "=" + value;
+		var expiryString = "";
+		if (expiry != null) {
+			try {
+				expiryString = ";expires=" + new Date(expiry).getTime().toGMTString();
+			} 
+			catch (e) {
+				if (expiry) {
+					var lsd = new Date();
+					lsd.setTime(lsd.getTime() + expiry * 1000);
+					lsd.setTime(lsd.getTime()+expiry);
+					expiryString = ";expires=" + lsd.toGMTString();
+					
+				}
+			}
+		}else {
+			alert('setCookie方法没有设置过期时间！');
+			return;
+		}
+		var pathString = (path == null) ? ";path=/" : ";path=" + path;
+		var domainString = (domain == null) ? ";domain=" + window.location.host : ";domain=" + domain;
+		var secureString = (secure) ? ";secure=" : "";
+		document.cookie = nameString + expiryString + pathString + domainString + secureString;
+	},
+	getCookie:function(name) {
+		var i, aname, value, ARRcookies = document.cookie.split(";");
+		for (i = 0; i < ARRcookies.length; i++) {
+			aname = ARRcookies[i].substr(0, ARRcookies[i].indexOf("="));
+			value = ARRcookies[i].substr(ARRcookies[i].indexOf("=") + 1);
+			aname = aname.replace(/^\s+|\s+$/g, "");
+			if (aname == name) {
+				return unescape(value);
+			}
+		}
+		return '';
+	},
+	getUrlAtt:function() {
+		var qs      = window.location.search.length?window.location.search.substring(1):'',
+			args    = {},
+			items   = qs.length ? qs.split('&'):[],
+			item    = null,
+			arr     = [];
+		for (var i=0,o=items.length;i<o;i++) {
+			item    = items[i].split('=');
+			name    = item[0];
+			value   = item[1];
+			if(name.length) args[name] = value;
+		}
+		return args;
+	}
+};
+
+(function() {
+	var u      = common.getUrlAtt(),
+		id     = u.id,
+		cid    = u.catid,
+		cookie = window.LS.get("ls"+cid)?window.LS.get("ls"+cid):"",
+		title  = document.getElementById('title'),
+		des    = document.getElementById('description'),
+		l      = !cookie?-1:cookie.split("|").length-1,
+		n;
+		
+	if(id) {
+		n = "h"+id;
+	}else {
+		var root = false,
+			nc   = [];
+		for(var i=0;i<l+1;i++) {
+			var s     = cookie.split("|"),
+				index = s[i].indexOf("-");
+			if(parseInt(s[i].substr(index+1))&&!root) {
+				n = s[i].substr(0,index);
+				nc.push(n+"-0");
+				root = true;
+				
+			}else {
+				nc.push(s[i]);
+			}
+		}
+		if(!root) n = "h"+(l+1);
+		
+		cookie = root?nc.join("|"):(cookie?nc.join("|")+"|"+n+"-0":n+"-0");
+		window.LS.set("ls"+cid,cookie);
+
+	}
+	
+	
+	window.onbeforeunload = function() {
+		var reg = new RegExp(n+"(\-0|\-1){1}"),
+			ne  = cookie.replace(reg,n+"-1");
+		console.log(ne);
+		window.LS.set("ls"+cid,ne);
+		return "确定要离开此页吗？"; 
+	}
+ 
+	setTimeout(function() {
+		if(document.getElementById("cke_4")) {
+			document.getElementById("cke_4").onclick = _run;
+		}
+		
+		function _run() {
+			
+			var c = document.getElementById('cke_contents_content');
+			if(c&&c.getElementsByTagName("iframe")) {
+				var obj = c.getElementsByTagName("iframe")[0].contentWindow;
+				obj.onbeforeunload = function() {
+					text = obj.document.body.innerHTML;
+					window.LS.set("e"+n+"_"+cid, text);
+					window.LS.set("t"+n+"_"+cid, title.value);
+					window.LS.set("d"+n+"_"+cid, des.value);
+				};
+				console.log(n);
+				if(window.LS.get("e"+n+"_"+cid)) obj.document.body.innerHTML = window.LS.get("e"+n+"_"+cid);
+				if(window.LS.get("t"+n+"_"+cid)) title.value = window.LS.get("t"+n+"_"+cid);
+				if(window.LS.get("d"+n+"_"+cid)) des.value   = window.LS.get("d"+n+"_"+cid);	
+			}
+		}
+		_run();
+	},1000);
+	
+	
+	
+	var btn = document.createElement("input");
+	btn.setAttribute("type","button");
+	btn.value = "非正常关机恢复";
+	btn.style.cssText="position:fixed;top:10px;right:10px;";
+	document.body.appendChild(btn);
+	btn.onclick = function() {
+		var o = window.LS.get("ls"+cid)?window.LS.get("ls"+cid):"",
+			l = o.split("|");
+		if(!o) {
+			alert("没有可恢复内容！");
+			return;
+		}
+		
+	
+		
+
+		var ls = parseInt(u.ls) || 0;
+		if(window.LS.get("eh"+ls+cid)) obj.document.body.innerHTML = window.LS.get("eh"+ls+cid);
+		if(window.LS.get("th"+ls+cid)) title.value = window.LS.get("th"+ls+cid);
+		if(window.LS.get("dh"+ls+cid)) des.value   = window.LS.get("dh"+ls+cid);
+		if(ls<l.length){
+			window.open("http://phpcms.huanqiu.com/index.php?m=content&c=content&a=add&menuid=&catid="+cid+"&pc_hash=G0TbFc&pc_hash=G0TbFc&ls="+(ls+1));
+		}
+
+	};
+})();
+</script>
+
+</body>
+</html>

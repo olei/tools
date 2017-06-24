@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>环球网</title>
+<script type="text/javascript" src="HQtools1.0.0.js" charset="utf-8"></script>
+<!--script type="text/javascript" src="http://himg2.huanqiu.com/statics/hq2013/js/lib/jquery1.9.1.js" charset="utf-8"></script-->
+<style>
+#a {margin-left:10px;}
+</style>
+</head>
+
+<body style="height:2000px;">  
+<input type="button" value="++" class="button" />
+<input type="button" value="+++" class="button1" />
+<div id="a">111111111111111</div>
+
+<script type="text/javascript">
+
+
+$(".button").on("click",function() {
+	$("#a").animate({
+		"margin-top":500
+	},2000);
+});
+
+$(".button1").on("click",function() {
+	$("#a").animate({
+		"margin-top":50
+	},500);
+});
+
+</script>
+	
+
+	
+</body>
+</html>

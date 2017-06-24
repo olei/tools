@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=7" />
+<title>环球网</title>
+<script type="text/javascript" src="http://himg2.huanqiu.com/statics/hq2013/js/jquery1.9.1.js" charset="utf-8"></script>
+<script type="text/javascript" src="HQControl1.1.0.min.js" charset="utf-8"></script>
+
+</head>
+
+<body>  
+<script type="text/javascript">
+
+$(document).ready(function() {
+	$("#abc").HQ_dateControl({
+		backType:"date",
+		multiSelect:"selectMore",
+		displayNum:2,
+		min:1,
+		callback:function(d) {
+			alert(d);
+		}
+	});
+		$("#bca").HQ_dateControl({
+		multiSelect:"section",
+		callback:function(d) {
+			alert(d);
+		},
+		min:1
+	});
+
+
+	$("#cba").HQ_dateControl({
+		format:"YYYY/MM/DD",
+		data:{
+			1415116800000:{li:[15,422,13,54,75,96]},
+			1415203200000:{},
+			1415289600000:{},
+			1415376000000:{},
+			1415462400000:{},
+			1415548800000:{},
+			1416585600000:{},
+			1416153600000:{},
+			1415721600000:{li:[1,2,3,4,5,6,7,8,9]},
+			1417017600000:{li:[12,12,131,14,25,46,67,48,29]}
+		}
+	});
+
+	$("#bac").HQ_dateControl();
+	$("#acb").HQ_dateControl();
+	$("#cab").HQ_dateControl({
+		min:1
+	});
+	
+	$("#abcd").HQ_dateControl({
+		format:"YYYY/MM/DD",
+		backType:"timestamp",
+		callback:function(d) {
+			alert(d);
+		},
+		min:-1
+	});
+
+	$("#abce").HQ_dateControl({
+		min:1
+	});
+	
+});
+
+</script>
+
+<div style="width:100%;height:2000px;">
+<input type="text" id="abc" value="" style="width:800px;" /> 
+<input type="text" id="bca" value="2014-11-12;2014-11-19" style="width:800px;" /> 
+<input type="text" id="cab" value="2014-11-13" /> 
+<input type="text" id="cba" value="2014/11/04" /> 
+<input type="text" id="bac" value="1900-11-13" />
+<input type="text" id="acb" value="2099-11-13" />
+<input type="text" id="abcd" value="1099-11-13" />
+<input type="text" id="abce" value="2299-11-13" />
+</div>
+	
+</body>
+</html>
